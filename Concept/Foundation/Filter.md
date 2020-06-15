@@ -227,3 +227,21 @@ API 排序规则参数是数组类型，所以我们可以一次性传入多个�
      */
 }
 ```
+
+## KVC
+
+### 关键字
+
+* @min：最小值
+* @max ：最大值
+* @avg ：平均值
+* @sum：总和
+
+### 基础运算
+
+```
+NSInteger min = [[self.sources valueForKeyPath:@"@min.monry"] integerValue];
+NSInteger max = [[self.sources valueForKeyPath:@"@max.monry"] integerValue] ;
+NSInteger sum =[[self.sources valueForKeyPath:@"@sum.monry"] integerValue];
+double avg = [[self.sources valueForKeyPath:@"@avg.monry"] doubleValue] ;
+```
