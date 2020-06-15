@@ -1,4 +1,4 @@
-## NSPredicate的基本用法
+## NSPredicate
 
 ### 1. 比较运算符
 
@@ -67,7 +67,33 @@ AND、OR、IN、NOT、ALL、ANY、SOME、NONE、LIKE、CASEINSENSITIVE、CI、MA
 
 **注：虽然大小写都可以，但是更推荐使用大写来表示这些保留字**
 
-### 6. 正则表达式
+### 6. 谓词中的占位符参数
+
+* %K：用于动态传入属性名
+* %@：用于动态设置属性值
+* $VALUE：个人感觉是在声明变量
+
+```
+NSArray *array = @[[Person Person:@"张三" Age:12],
+                   [Person Person:@"张云" Age:24],
+                   [Person Person:@"李四" Age:25]];
+
+NSString *property = @"name";
+NSString *value = @"张";
+//1.筛选出名字中包含"张"的;
+NSPredicate *predicate = [NSPredicate predicateWithFormat:@"%K contains %@", property, value];
+NSArray *resultArray = [array filteredArrayUsingPredicate:predicate];
+//resultArray is "[name = 张三, age = 12], [name = 张云, age = 24]"
+
+//2.筛选出年龄大于24的;
+NSPredicate *predicate2 = [NSPredicate predicateWithFormat:@"%K > $Value", @"age"];
+//必须加上下面这句，不然会报错。$Value(Value可以随便改，统一就行)个人感觉是声明一个变量，下面是给变量赋值。
+predicate2 = [predicate2 predicateWithSubstitutionVariables:@{@"Value":@24}];
+NSArray *resultArray2 = [array filteredArrayUsingPredicate:predicate2];
+//resultArray2 is "[name = 李四, age = 25]"
+```
+
+### 7. 正则表达式
 
 [正则表达式-菜鸟教程](https://www.runoob.com/regexp/regexp-tutorial.html)
 
@@ -76,5 +102,128 @@ AND、OR、IN、NOT、ALL、ANY、SOME、NONE、LIKE、CASEINSENSITIVE、CI、MA
     NSString *regex = @"^[1][3-8]\\d{9}$";
     NSPredicate *pred = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regex];
     return [pred evaluateWithObject:phoneNumber];
+}
+```
+
+## NSSortDescriptor
+
+### 简介
+
+NSSortDescriptor 用于指定集合内数据的排序规则 <按照指定的 key 进行排序>。 iOS 的集合对象均可使用 NSSortDescriptor 进行排序。
+
+相关 API：
+
+1. NSSet、NSMutableSet、NSArray、NSOrderedSet
+
+```
+-(NSArray<ObjectType> *)sortedArrayUsingDescriptors:(NSArray<NSSortDescriptor *> *)sortDescriptors
+```
+
+2. NSMutableArray、NSMutableOrderedSet
+
+```
+-(void)sortUsingDescriptors:(NSArray<NSSortDescriptor *> *)sortDescriptors;
+```
+
+### 示例
+
+#### 1.创建 Student 对象
+
+```
+#import <Foundation/Foundation.h>
+
+NS_ASSUME_NONNULL_BEGIN
+
+@interface Student : NSObject
+
+@property (assign, nonatomic) int stu_age;
+@property (copy,   nonatomic) NSString *stu_name;
+@end
+
+NS_ASSUME_NONNULL_END
+```
+
+#### 2.创建待排序的数据
+
+```
+#import "ViewController.h"
+#import "Student.h"
+
+@interface ViewController ()
+
+@property (strong, nonatomic) NSMutableArray *students;
+@end
+
+@implementation ViewController
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    // Do any additional setup after loading the view.
+    
+    self.students = [[NSMutableArray alloc] init];
+    
+    for (int i = 0; i < 10; i++) {
+        
+        int random_age  = arc4random()%3 + 10;
+        int random_name = arc4random()%10;
+        
+        Student *student = [[Student alloc] init];
+        student.stu_age  = random_age;
+        student.stu_name = [NSString stringWithFormat:@"stu_%d", random_name];
+        
+        [self.students addObject:student];
+    }
+}
+```
+
+#### 3.单一规则排序
+
+```
+- (void)sortByStuAge {
+    // 按照 stu_age 进行排序
+    // key --> 指定排序规则，ascending --> YES：升序   NO：降序
+    NSSortDescriptor *sd = [[NSSortDescriptor alloc] initWithKey:@"stu_age" ascending:YES];
+    [self.students sortUsingDescriptors:@[sd]];
+    
+    // 排序结果
+    /**
+     stu_age -> 10   stu_name -> stu_0
+     stu_age -> 10   stu_name -> stu_6
+     stu_age -> 10   stu_name -> stu_1
+     stu_age -> 10   stu_name -> stu_4
+     stu_age -> 10   stu_name -> stu_9
+     stu_age -> 11   stu_name -> stu_5
+     stu_age -> 11   stu_name -> stu_5
+     stu_age -> 11   stu_name -> stu_9
+     stu_age -> 11   stu_name -> stu_8
+     stu_age -> 11   stu_name -> stu_9
+     */
+}
+```
+
+#### 4.组合规则排序
+
+API 排序规则参数是数组类型，所以我们可以一次性传入多个排序规则。这些规则按照在数组参数内的顺序依次生效
+
+```
+- (void)sortByCombination {
+    // 先按照 stu_name 进行排序，当 stu_name 一致时，再按照 stu_age 进行排序
+    NSSortDescriptor *sd_name = [[NSSortDescriptor alloc] initWithKey:@"stu_name" ascending:YES];
+    NSSortDescriptor *sd_age  = [[NSSortDescriptor alloc] initWithKey:@"stu_age"  ascending:YES];
+    [self.students sortUsingDescriptors:@[sd_name, sd_age]];
+    
+    // 排序结果
+    /**
+     stu_age -> 12   stu_name -> stu_0
+     stu_age -> 12   stu_name -> stu_0
+     stu_age -> 11   stu_name -> stu_3
+     stu_age -> 10   stu_name -> stu_4
+     stu_age -> 10   stu_name -> stu_4
+     stu_age -> 11   stu_name -> stu_5
+     stu_age -> 12   stu_name -> stu_5
+     stu_age -> 10   stu_name -> stu_7
+     stu_age -> 11   stu_name -> stu_7
+     stu_age -> 12   stu_name -> stu_8
+     */
 }
 ```
