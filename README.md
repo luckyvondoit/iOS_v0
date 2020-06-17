@@ -1,6 +1,4 @@
-**OC类继承关系**
-
-![](./imgs/Class.jpg)
+[OC类继承关系](https://github.com/luckyvondoit/OC_Document/blob/master/Resource/Class.jpg)
 
 ## Concept
 
@@ -12,6 +10,6 @@
 
 ## UIKit
 
-![](./imgs/UIKit_Class.jpg)
+[UIKit继承关系](https://github.com/luckyvondoit/OC_Document/blob/master/Resource/UIKit_Class.jpg)
 
 * [UIKit](https://github.com/luckyvondoit/OC_Document/blob/master/UIKit/README.md)
