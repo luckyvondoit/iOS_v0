@@ -1,4 +1,7 @@
-[OC类继承关系](https://github.com/luckyvondoit/OC_Document/blob/master/Resource/Class.jpg)
+## Class
+
+* [OC类继承关系](https://github.com/luckyvondoit/OC_Document/blob/master/Resource/Class.jpg)
+* [UIKit继承关系](https://github.com/luckyvondoit/OC_Document/blob/master/Resource/UIKit_Class.jpg)
 
 ## Concept
 
@@ -9,7 +12,5 @@
 * [Foundation](https://github.com/luckyvondoit/OC_Document/blob/master/Foundation/README.md)
 
 ## UIKit
-
-[UIKit继承关系](https://github.com/luckyvondoit/OC_Document/blob/master/Resource/UIKit_Class.jpg)
 
 * [UIKit](https://github.com/luckyvondoit/OC_Document/blob/master/UIKit/README.md)
