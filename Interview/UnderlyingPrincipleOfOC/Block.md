@@ -5,7 +5,7 @@
 * 是封装了函数调用以及函数调用环境的OC对象
 * block的底层结构如图所示
 
-![](OC底层原理/imgs/7/7.1_1.png)
+![](./imgs/7/7.1_1.png)
 
 ```
 ^{
@@ -38,7 +38,7 @@ void (^block)(void) = ^{
 
 * 为了保证block内部能够正常访问外部的变量，block有个变量捕获机制
 
-![](OC底层原理/imgs/7/7.2_1.png)
+![](./imgs/7/7.2_1.png)
 
 * 局部变量block会捕获（由于局部变量作用域，可能访问的时候变量已经释放，所以需要在block中保存），全局变量block不会捕获。
 
@@ -46,7 +46,7 @@ void (^block)(void) = ^{
 
 * 属性、成员变量block会捕获self，需要通过self才能访问到（属性：self.name，成员变量self->_name）
 
-![](OC底层原理/imgs/7/7.2_2.png)
+![](./imgs/7/7.2_2.png)
 
 ```
 main.m中block的简化执行代码：
@@ -107,7 +107,7 @@ block的类型以运行时为准，clang转的只能作为参考
 * __NSStackBlock__ （ _NSConcreteStackBlock ）
 * __NSMallocBlock__ （ _NSConcreteMallocBlock ）
 
-![](OC底层原理/imgs/7/7.3_1.png)
+![](./imgs/7/7.3_1.png)
 
 ```
 越往下内存地址越大
@@ -127,7 +127,7 @@ int a = 10;
 ```
 
 
-![](OC底层原理/imgs/7/7.3_2.png)
+![](./imgs/7/7.3_2.png)
 
 ```
 ARC下block捕获auto变量仍是stackblock，会自动对block进行copy操作，要想观察block类型需要在MRC环境下。
@@ -147,7 +147,7 @@ MRC下对block进行copy，需要调用release释放block。
 
 每一种类型的block调用copy后的结果如下所示
 
-![](OC底层原理/imgs/7/7.3_3.png)
+![](./imgs/7/7.3_3.png)
 
 ## 7.4 block的copy
 
@@ -184,7 +184,7 @@ ARC下block属性的建议写法
     * dispose函数内部会调用_Block_object_dispose函数
     * _Block_object_dispose函数会自动释放引用的auto变量（release）
 
-![](OC底层原理/imgs/7/7.5_1.png)
+![](./imgs/7/7.5_1.png)
 
 ```
 typedef void (^MJBlock)(void);
@@ -276,7 +276,7 @@ static void __main_block_func_0(struct __main_block_impl_0 *__cself) {
 
 ## 7.7 __block修饰符
 
-![](OC底层原理/imgs/7/7.7_1.png)
+![](./imgs/7/7.7_1.png)
 
 * 注意 只有在需要修改auto变量的时候再添加__block。尽量不要使用，加了之后编译的代码复杂。
 
@@ -390,21 +390,21 @@ __Block_byref_age_0 *__forwarding;
     * copy函数内部会调用_Block_object_assign函数
     * _Block_object_assign函数会对__block变量形成强引用（retain）
 
-![](OC底层原理/imgs/7/7.8_1.png)
-![](OC底层原理/imgs/7/7.8_2.png)
+![](./imgs/7/7.8_1.png)
+![](./imgs/7/7.8_2.png)
 
 * 当block从堆中移除时
     * 会调用block内部的dispose函数
     * dispose函数内部会调用_Block_object_dispose函数
     * _Block_object_dispose函数会自动释放引用的__block变量（release)
-![](OC底层原理/imgs/7/7.8_3.png)
-![](OC底层原理/imgs/7/7.8_4.png)
+![](./imgs/7/7.8_3.png)
+![](./imgs/7/7.8_4.png)
 
 ## 7.9 __block的__forwarding指针
 
 如果栈上的block进行copy会复制到堆上，同时将引用的__block变量复制到堆上，__forwarding指针，保证不管访问堆、栈哪个__block变量，最终修改的都是堆上的__block变量。
 
-![](OC底层原理/imgs/7/7.9_1.png)
+![](./imgs/7/7.9_1.png)
 
 ## 7.10 对象类型的auto变量、__block变量
 * 当block在栈上时，对它们都不会产生强引用
@@ -436,7 +436,7 @@ block在堆上
 __block变量，_Block_object_assign都是强引用。
 ```
 
-![](OC底层原理/imgs/7/7.10_1.png)
+![](./imgs/7/7.10_1.png)
 
 ## 7.11 被__block修饰的对象类型
 
@@ -452,7 +452,7 @@ __block变量，_Block_object_assign都是强引用。
 
 ## 7.12 循环引用问题
 
-![](OC底层原理/imgs/7/7.12_1.png)
+![](./imgs/7/7.12_1.png)
 
 ```
 __weak typeof(self) weakSelf = self;
@@ -467,21 +467,21 @@ self.block = ^{
 
 * 用__weak、__unsafe_unretained解决
 
-![](OC底层原理/imgs/7/7.12.1_1.png)
+![](./imgs/7/7.12.1_1.png)
 
 * 用__block解决（必须要调用block）
 
-![](OC底层原理/imgs/7/7.12.1_2.png)
+![](./imgs/7/7.12.1_2.png)
 
 ### 7.12.2 解决循环引用问题 - MRC
 
 * 用__unsafe_unretained解决
 
-![](OC底层原理/imgs/7/7.12.2_1.png)
+![](./imgs/7/7.12.2_1.png)
 
 * 用__block解决
 
-![](OC底层原理/imgs/7/7.12.2_2.png)
+![](./imgs/7/7.12.2_2.png)
 
 ## 面试题
 

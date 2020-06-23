@@ -1,25 +1,25 @@
 # 11、内存管理
 ## 11.1 定时器
 ### 11.1.1 CADisplayLink、NSTimer使用注意
-![](OC底层原理/imgs/11/11.1.1_1.png)
+![](./imgs/11/11.1.1_1.png)
 
 CADisplayLink、NSTimer会强引用target，如果target再强引用CADisplayLink、NSTimer会导致循环引用。解决办法引入一个中间对象，改为弱引用。如下图所示。NSProxy对象如果发现方法找不到直接进入消息转发流程，所以中间对象用继承自NSProxy的对象最合适，效率高。
 
-![](OC底层原理/imgs/11/11.1.1_2.png)
-![](OC底层原理/imgs/11/11.1.1_3.png)
+![](./imgs/11/11.1.1_2.png)
+![](./imgs/11/11.1.1_3.png)
 
 
 ### 11.1.2 GCD定时器
 * NSTimer依赖于RunLoop，如果RunLoop的任务过于繁重，可能会导致NSTimer不准时
 * 而GCD的定时器会更加准时
 
-![](OC底层原理/imgs/11/11.1.2_1.png)
+![](./imgs/11/11.1.2_1.png)
 
 ## 11.2 内存布局
 
 ### 11.2.1 iOS程序的内存布局
 
-![](OC底层原理/imgs/11/11.2.1_1.png)
+![](./imgs/11/11.2.1_1.png)
 
 ### 11.2.2 Tagged Pointer
 从64bit开始，iOS引入了Tagged Pointer技术，用于优化NSNumber、NSDate、NSString等小对象的存储
@@ -37,8 +37,8 @@ iOS平台，最高有效位是1（第64bit）
 Mac平台，最低有效位是1
 
 ### 11.2.3 判断是否为Tagged Pointer
-![](OC底层原理/imgs/11/11.2.3_1.png)
-![](OC底层原理/imgs/11/11.2.3_2.png)
+![](./imgs/11/11.2.3_1.png)
+![](./imgs/11/11.2.3_2.png)
 
 ## 11.3 对象的内存管理
 
@@ -56,15 +56,15 @@ Mac平台，最低有效位是1
 可以通过以下私有函数来查看自动释放池的情况
 extern void _objc_autoreleasePoolPrint(void);
 
-![](OC底层原理/imgs/11/11.3.1_1.png)
-![](OC底层原理/imgs/11/11.3.1_2.png)
+![](./imgs/11/11.3.1_1.png)
+![](./imgs/11/11.3.1_2.png)
 
 ### 11.3.2 copy和mutableCopy
-![](OC底层原理/imgs/11/11.3.2_1.png)
+![](./imgs/11/11.3.2_1.png)
 
 ### 11.3.3 引用计数的存储
 
-![](OC底层原理/imgs/11/11.3.3_1.png)
+![](./imgs/11/11.3.3_1.png)
 
 ### 11.3.4 dealloc
 当一个对象要释放时，会自动调用dealloc，接下的调用轨迹是
@@ -75,7 +75,7 @@ rootDealloc
 object_dispose
 objc_destructInstance、free
 
-![](OC底层原理/imgs/11/11.3.4_1.png)
+![](./imgs/11/11.3.4_1.png)
 
 ## 11.4 自动释放池
 
@@ -88,11 +88,11 @@ objc_destructInstance、free
 clang重写@autoreleasepool
 objc4源码：NSObject.mm
 
-![](OC底层原理/imgs/11/11.4.1_1.png)
+![](./imgs/11/11.4.1_1.png)
 
 ### 11.4.2 AutoreleasePoolPage的结构
 
-![](OC底层原理/imgs/11/11.4.2_1.png)
+![](./imgs/11/11.4.2_1.png)
 
 调用push方法会将一个POOL_BOUNDARY入栈，并且返回其存放的内存地址
 
