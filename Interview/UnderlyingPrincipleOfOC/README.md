@@ -1,5 +1,5 @@
-* [OC对象](https://github.com/luckyvondoit/OC_Document/blob/master/Interview/UnderlyingPrincipleOfOC/Object.md)
-* [KVO](https://github.com/luckyvondoit/OC_Document/blob/master/Interview/UnderlyingPrincipleOfOC/KVO.md)
+1. [OC对象](https://github.com/luckyvondoit/OC_Document/blob/master/Interview/UnderlyingPrincipleOfOC/Object.md)
+2. [KVO](https://github.com/luckyvondoit/OC_Document/blob/master/Interview/UnderlyingPrincipleOfOC/KVO.md)
 * [KVC](https://github.com/luckyvondoit/OC_Document/blob/master/Interview/UnderlyingPrincipleOfOC/KVC.md)
 * [Category](https://github.com/luckyvondoit/OC_Document/blob/master/Interview/UnderlyingPrincipleOfOC/Category.md)
 * [AssociatedObject](https://github.com/luckyvondoit/OC_Document/blob/master/Interview/UnderlyingPrincipleOfOC/AssociatedObject.md)
