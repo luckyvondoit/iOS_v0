@@ -1,4 +1,4 @@
-* [OC Object](https://github.com/luckyvondoit/OC_Document/blob/master/Interview/UnderlyingPrincipleOfOC/Object.md)
+* [Object](https://github.com/luckyvondoit/OC_Document/blob/master/Interview/UnderlyingPrincipleOfOC/Object.md)
 * [KVO](https://github.com/luckyvondoit/OC_Document/blob/master/Interview/UnderlyingPrincipleOfOC/KVO.md)
 * [KVC](https://github.com/luckyvondoit/OC_Document/blob/master/Interview/UnderlyingPrincipleOfOC/KVC.md)
 * [Category](https://github.com/luckyvondoit/OC_Document/blob/master/Interview/UnderlyingPrincipleOfOC/Category.md)
