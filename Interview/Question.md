@@ -20,6 +20,9 @@
 - runtime动态改变
 - 过 msg_send() 设置
 
-例子：有这样一个类 IFXPrivateClass:
+例子：
+[IFXChangePrivateProperty.h](https://github.com/luckyvondoit/OC_Foundation/blob/master/Classes/ChangePrivateProperty/IFXChangePrivateProperty.h)
+[IFXChangePrivateProperty.m](https://github.com/luckyvondoit/OC_Foundation/blob/master/Classes/ChangePrivateProperty/IFXChangePrivateProperty.m)
 
 </details>
+
