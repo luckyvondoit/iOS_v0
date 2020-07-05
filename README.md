@@ -5,7 +5,6 @@
 
 ## Interview
 
-* [Blog](https://github.com/luckyvondoit/OC_Document/blob/master/Interview/Blog.md)
 * [Interview](https://github.com/luckyvondoit/OC_Document/blob/master/Interview/README.md)
 
 ## Foundation
