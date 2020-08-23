@@ -28,9 +28,9 @@
 ### 通过KVC修改属性会触发KVO么？
 
 ```
-通过kvo监听某个属性，如果修改属性，会触发kvo，如果用 -> 直接修改成员变量，不会触发KVO。
-如果通过kvc修改类的变量，不管是属性还是成员变量，只用通过kvo监听这个变量都很触发kvo。（即都很收到属性变化的通知）
-kvo监听某个属性，系统通过runtime生成NSKVONotififying_XXX子类重写set方法。发通知（见上面kvo原理）
+通过KVO监听某个属性，如果修改属性，会触发KVO，如果用 -> 直接修改成员变量，不会触发KVO。
+如果通过KVC修改类的变量，不管是属性还是成员变量，只要通过KVO监听这个变量都会触发KVO。（即都会收到属性变化的通知）
+kVO监听某个属性，系统通过runtime生成`NSKVONotififying_XXX`子类重写set方法。发通知（见上面kvo原理）
 kvc在setValue:forKey/setValue:forKeyPath中调用willChangeValueForKey、didChangeValueForKey（必须成对出现，要不然不会发通知），在didChangeValueForKey中会发通知变量改变
 ```
 
