@@ -22,14 +22,14 @@ void (^block)(void) = ^{
     NSLog(@"this is a block");
 }
 执行
-block();
+block();
 
 
 ```
 
 ## 7.2 block的变量捕获（capture）
 
-* 变量的分类
+* 变量的分类
     * 局部变量
         * auto
         * static
@@ -40,11 +40,11 @@ void (^block)(void) = ^{
 
 ![](./imgs/7/7.2_1.png)
 
-* 局部变量block会捕获（由于局部变量作用域，可能访问的时候变量已经释放，所以需要在block中保存），全局变量block不会捕获。
+* 局部变量block会捕获（由于局部变量作用域，可能访问的时候变量已经释放，所以需要在block中保存），全局变量block不会捕获。
 
-* block会捕获self。（self是oc方法的默认参数，是局部变量，oc代码转成c++代码，方法转成函数都会带两个默认参数：Class *self，SEL _cmd）
+* block会捕获self。（self是oc方法的默认参数，是局部变量，oc代码转成c++代码，方法转成函数都会带两个默认参数：Class *self，SEL _cmd）
 
-* 属性、成员变量block会捕获self，需要通过self才能访问到（属性：self.name，成员变量self->_name）
+* 属性、成员变量block会捕获self，需要通过self才能访问到（属性：self.name，成员变量self->_name）
 
 ![](./imgs/7/7.2_2.png)
 
@@ -63,8 +63,8 @@ void (*block)(void) = &__main_block_impl_0(
 // 执行block内部的代码
 block->FuncPtr(block);
 
-其中
-//结构体名称__main为调用block的方法名
+其中
+//结构体名称__main为调用block的方法名
 struct __main_block_impl_0 {
   struct __block_impl impl;
   struct __main_block_desc_0* Desc;
@@ -88,7 +88,7 @@ static void __main_block_func_0(struct __main_block_impl_0 *__cself) {
             NSLog((NSString *)&__NSConstantStringImpl__var_folders_2r__m13fp2x2n9dvlr8d68yry500000gn_T_main_fd2a14_mi_0, a, (*b));
         }
 
-static struct __main_block_desc_0 {
+static struct __main_block_desc_0 {
   size_t reserved;
   size_t Block_size;
 } __main_block_desc_0_DATA = { 0, sizeof(struct __main_block_impl_0)};
