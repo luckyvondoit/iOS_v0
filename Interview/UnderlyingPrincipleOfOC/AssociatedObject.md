@@ -13,7 +13,7 @@ void objc_setAssociatedObject(id object, const void * key, id value, objc_Associ
 2. 获得关联对象
 
 ```
-id objc_getAssociatedObject(id object, const void * key
+id objc_getAssociatedObject(id object, const void * key)
 ```
 
 3. 移除所有的关联对象
@@ -33,7 +33,7 @@ static (const) char MyKey;
 objc_setAssociatedObject(obj, &MyKey, value, OBJC_ASSOCIATION_RETAIN_NONATOMIC)
 objc_getAssociatedObject(obj, &MyKey)
 
-使用属性名作为key（同一个常量地址相同）
+使用属性名作为key（同一个常量地址相同）
 objc_setAssociatedObject(obj, @"property", value, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 objc_getAssociatedObject(obj, @"property");
 
@@ -42,16 +42,16 @@ objc_setAssociatedObject(obj, @selector(getter), value, OBJC_ASSOCIATION_RETAIN_
 objc_getAssociatedObject(obj, @selector(getter))
 
 注意：
-加static是为了让外部无法通过extern访问。static限制作用域。
-加const是为了和函数的参数类型一致，加不加都行。
+加static是为了让外部无法通过extern访问。static限制作用域。
+加const是为了和函数的参数类型一致，加不加都行。
 ```
 
 ## 6.3 objc_AssociationPolicy
 
 ![](./imgs/6/6.3_1.png)
 
-* 注意：没有弱引用（weak）,弱引用相关用assign，如果访问已经释放了的对象，会造成崩溃（对象释放之后，weak会将指针置为nil，assign不会，会出现坏内存访问的崩溃）。
-* 如果关联对象释放了，会将AssociationsHashMap中object对象对应的disguised_ptr_t和ObjectAssociationMap键值对移除。
+* 注意：没有弱引用（weak）,弱引用相关用assign，如果访问已经释放了的对象，会造成崩溃（对象释放之后，weak会将指针置为nil，assign不会，会出现坏内存访问的崩溃）。
+* 如果关联对象释放了，会将AssociationsHashMap中object对象对应的disguised_ptr_t和ObjectAssociationMap键值对移除。
 
 ## 6.4 关联对象的原理
 
