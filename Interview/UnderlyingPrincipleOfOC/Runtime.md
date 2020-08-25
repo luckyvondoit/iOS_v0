@@ -940,7 +940,7 @@ int main(int argc, const char * argv[]) {
         
         
         // 这句代码的方法调用者不管是哪个类（只要是NSObject体系下的），都返回YES
-        // 类的方法列表存放在原类中，基类的MetaClass对象的supperClass指针指向基类的Class对象，所以第一个方法返回ture。
+        // 类的方法列表存放在元类中，基类的MetaClass对象的supperClass指针指向基类的Class对象，所以第一个方法返回ture。
         NSLog(@"%d", [NSObject isKindOfClass:[NSObject class]]); // 1
         NSLog(@"%d", [NSObject isMemberOfClass:[NSObject class]]); // 0
         NSLog(@"%d", [MJPerson isKindOfClass:[MJPerson class]]); // 0
