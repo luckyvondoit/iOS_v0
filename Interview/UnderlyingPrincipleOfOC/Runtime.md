@@ -312,6 +312,7 @@ x 上面的地址
 }
 
 @end
+```
 
 * 相关技术点，NS_OPTIONS枚举实现原理
 
@@ -341,8 +342,6 @@ typedef enum {
         NSLog(@"包含MJOptionsFour");
     }
 }
-```
-
 ```
 
 ### 8.1.2 isa位域
