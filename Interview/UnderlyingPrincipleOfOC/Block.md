@@ -130,7 +130,7 @@ int a = 10;
 ![](./imgs/7/7.3_2.png)
 
 ```
-ARC下block捕获auto变量仍是stackblock，会自动对block进行copy操作，要想观察block类型需要在MRC环境下。
+ARC下block捕获auto变量仍是MallocBlock，会自动对block进行copy操作，要想观察block类型需要在MRC环境下。
 如果block是StackBlock，离开作用域block会被释放，再访问block会出现未知的错误。
 GlobalBlock、MallocBlock调用copy类型不变，StackBlock调用copy变成MallocBlock。
 MRC下对block进行copy，需要调用release释放block。
