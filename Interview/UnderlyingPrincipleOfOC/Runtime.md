@@ -211,9 +211,11 @@ lldb
 p/x persion->_tallRichHandsome
 p/x &(persion->_tallRichHandsome)
 x 上面的地址
+```
 
 * 共用体
 
+```
 #import <Foundation/Foundation.h>
 @interface MJPerson : NSObject
 - (void)setTall:(BOOL)tall;
