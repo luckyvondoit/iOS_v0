@@ -129,10 +129,6 @@ dispatch_async(dispatch_queue_t queue, dispatch_block_t block);
 >对应生产者-消费者模型，只有先生产出东西，才能消费
 
 ```
-
-```
-
-```
 通过查看汇编代码，就可以知道互斥锁、自旋锁的实现原理
 stepi/si 单行执行一条汇编，遇到方法调用会跳进去。
 nexti/ni 单行执行一条汇编，遇到方法调用会跳过。
