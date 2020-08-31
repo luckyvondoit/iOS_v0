@@ -35,3 +35,5 @@
 35. 用过swift吗？如果没有，平常有学习吗？
 36. 说一下你对架构的理解？
 37. 为什么一定要在主线程里面更新UI？
+
+* [iOS面试题](https://blog.csdn.net/hanangellove/article/details/45033453)
