@@ -5,7 +5,7 @@
 >哪个锁apple存在问题又是什么问题?  
 
 <details>
-<summary> 参考内容 </summary>
+<summary> 参考 </summary>
 
 - 我们在使用多线程的时候多个线程可能会访问同一块资源，这样就很容易引发数据错乱和数据安全等问题，这时候就需要我们保证每次只有一个线程访问这一块资源，锁 应运而生
 
@@ -19,3 +19,13 @@
 
 - [多线程](https://github.com/luckyvondoit/OC_Document/blob/master/Interview/Book/UnderlyingPrincipleOfOC/Multithreading.md)
 </details>
+
+### 解决网络请求和界面刷新顺序问题
+
+<details>
+<summary> 参考 </summary>
+* [解决网络请求和界面刷新顺序问题](https://blog.csdn.net/u012709932/article/details/77924019)
+</details>
+
+
+
