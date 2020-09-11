@@ -17,7 +17,5 @@
 
 - dispatch_semaphore 信号量 : 保持线程同步为线程加锁
 
-[多线程](https://github.com/luckyvondoit/OC_Document/blob/master/Interview/Book/UnderlyingPrincipleOfOC/Multithreading.md)
-```
-
+- [多线程](https://github.com/luckyvondoit/OC_Document/blob/master/Interview/Book/UnderlyingPrincipleOfOC/Multithreading.md)
 </details>
