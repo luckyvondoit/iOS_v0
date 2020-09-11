@@ -1,1 +1,5 @@
-* [MemoryManagement](./MemoryManagement/README.md)
+### 谈下iOS开发中知道的哪些锁?
+
+>哪个性能最差?SD和AFN使用的哪个?
+>一般开发中你最常用哪个?
+>哪个锁apple存在问题又是什么问题?
