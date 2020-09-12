@@ -90,6 +90,36 @@ UIResponder中提供的事件处理方法。
 }
 ```
 
+为了验证点击上面的事件的处理顺序，在基类View重写这几个方法：
+
+```
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    NSLog(@"%@ touchesBegan", NSStringFromClass([self class]));
+    [super touchesBegan:touches withEvent:event];
+}
+
+- (void)touchesMoved:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    NSLog(@"%@ touchesMoved", NSStringFromClass([self class]));
+    [super touchesMoved:touches withEvent:event];
+}
+
+- (void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    NSLog(@"%@ touchesEnded", NSStringFromClass([self class]));
+    [super touchesEnded:touches withEvent:event];
+}
+```
+
+同样也为控制器添(IFXResponderChainVC)加相关touches方法，日志打印看调用顺序：
+
+```
+2020-06-16 18:05:31.852814+0800 IFXProgram[86599:1463313] IFXView3 touchesBegan
+2020-06-16 18:05:31.853018+0800 IFXProgram[86599:1463313] IFXView2 touchesBegan
+2020-06-16 18:05:31.853199+0800 IFXProgram[86599:1463313] IFXResponderChainVC touchesBegan
+2020-06-16 18:05:31.897063+0800 IFXProgram[86599:1463313] IFXView3 touchesEnded
+2020-06-16 18:05:31.897338+0800 IFXProgram[86599:1463313] IFXView2 touchesEnded
+2020-06-16 18:05:31.897531+0800 IFXProgram[86599:1463313] IFXResponderChainVC touchesEnded
+```
+
 ```
 //对应上图左边
 //层级关系:UIWindow-(rootVC)->UINavigationController-(rootVC)->IFXResponderChainVC.view-(addSubView)->IFXView2-(addSubView)->IFXView3
@@ -130,36 +160,6 @@ UIResponder中提供的事件处理方法。
 2020-06-16 17:45:19.811491+0800 IFXProgram[84924:1449157] -------------UIWindowScene
 2020-06-16 17:45:19.812676+0800 IFXProgram[84924:1449157] --------------UIApplication
 2020-06-16 17:45:19.813272+0800 IFXProgram[84924:1449157] ---------------AppDelegate
-```
-
-为了验证点击上面的事件的处理顺序，在基类View重写这几个方法：
-
-```
-- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
-    NSLog(@"%@ touchesBegan", NSStringFromClass([self class]));
-    [super touchesBegan:touches withEvent:event];
-}
-
-- (void)touchesMoved:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
-    NSLog(@"%@ touchesMoved", NSStringFromClass([self class]));
-    [super touchesMoved:touches withEvent:event];
-}
-
-- (void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
-    NSLog(@"%@ touchesEnded", NSStringFromClass([self class]));
-    [super touchesEnded:touches withEvent:event];
-}
-```
-
-同样也为控制器添(IFXResponderChainVC)加相关touches方法，日志打印看调用顺序：
-
-```
-2020-06-16 18:05:31.852814+0800 IFXProgram[86599:1463313] IFXView3 touchesBegan
-2020-06-16 18:05:31.853018+0800 IFXProgram[86599:1463313] IFXView2 touchesBegan
-2020-06-16 18:05:31.853199+0800 IFXProgram[86599:1463313] IFXResponderChainVC touchesBegan
-2020-06-16 18:05:31.897063+0800 IFXProgram[86599:1463313] IFXView3 touchesEnded
-2020-06-16 18:05:31.897338+0800 IFXProgram[86599:1463313] IFXView2 touchesEnded
-2020-06-16 18:05:31.897531+0800 IFXProgram[86599:1463313] IFXResponderChainVC touchesEnded
 ```
 
 可以看到先是由UIWindow通过hitTest返回所找到的最合适的响应者View3, 接着执行了View3的touchesBegan，然后是通过nextResponder依次是View2、IFXResponderChainVC,可以看到完全是按照nextResponder链条的调用顺序，touchesEnded也是同样的顺序。
