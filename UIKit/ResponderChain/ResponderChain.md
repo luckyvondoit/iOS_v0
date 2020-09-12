@@ -259,3 +259,7 @@ UIView不接受事件处理的情况有:
     }
 }
 ```
+
+## 代码
+
+[demo](https://github.com/luckyvondoit/OC_UIKit/tree/master/Classes/ResponderChain)
