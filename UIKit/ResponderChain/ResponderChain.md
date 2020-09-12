@@ -91,6 +91,7 @@ UIResponder中提供的事件处理方法。
 ```
 
 ```
+//对应上图左边
 //层级关系:UIWindow-(rootVC)->UINavigationController-(rootVC)->IFXResponderChainVC.view-(addSubView)->IFXView2-(addSubView)->IFXView3
 
 2020-06-16 17:30:20.747597+0800 IFXProgram[83661:1437823] IFXView3
@@ -110,6 +111,7 @@ UIResponder中提供的事件处理方法。
 ```
 
 ```
+//对应上图右边
 //层级关系:UIWindow-(rootVC)->UINavigationController-(rootVC)->ViewController.view-(addSubView)->IFXResponderChainVC.view-(self.view addSubView)->IFXView2-(addSubView)->IFXView3
 
 2020-06-16 17:45:19.805592+0800 IFXProgram[84924:1449157] IFXView3
