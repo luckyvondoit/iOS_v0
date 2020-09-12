@@ -206,9 +206,7 @@ UIView不接受事件处理的情况有:
 
 ## 改变响应者链的示例
 
-在一个方形按钮中点击中间的圆形区域有效，而点击四角无效
-e'map
-核心思想是在pointInside: withEvent:方法中修改对应的区域
+在一个方形按钮中点击中间的圆形区域有效，而点击四角无效核心思想是在pointInside: withEvent:方法中修改对应的区域
 
 ![](./img/example.png)
 
