@@ -23,7 +23,9 @@
 
 ### 第三条：多用字面量语法，少用与之等价的方法
 
-1.多使用字面量语法来创建字符串，数组，字典等。 **传统创建数组方法:**
+1.多使用字面量语法来创建字符串，数组，字典等。 
+
+**传统创建数组方法:**
 
 ```
 NSArray *languages = [NSArray arrayWithObjects:@"PHP", @"Objective-C", someObject, @"Swift", @"Python", nil];
