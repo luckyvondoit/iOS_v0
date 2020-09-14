@@ -1,4 +1,4 @@
-# iOS 组件化方案探索 2016-3-18
+# iOS 组件化方案探索
 看了 Limboy( [蘑菇街 App 的组件化之路 - Limboy’s HQ](https://limboy.me/2016/03/10/mgj-components/) 与[蘑菇街 App 的组件化之路·续 - Limboy’s HQ](https://limboy.me/2016/03/14/mgj-components-continued/)) 和 Casa ([iOS应用架构谈 组件化方案 - Casa Taloyum](https://casatwy.com/iOS-Modulization.html)) 对 iOS 组件化方案的讨论，写篇文章梳理下思路。
 
 首先我觉得”组件”在这里不太合适，因为按我理解组件是指比较小的功能块，这些组件不需要多少组件间通信，没什么依赖，也就不需要做什么其他处理，面向对象就能搞定。而这里提到的是较大粒度的业务功能，我们习惯称为”模块”。为了方便表述，下面模块和组件代表同一个意思，都是指较大粒度的业务模块。
