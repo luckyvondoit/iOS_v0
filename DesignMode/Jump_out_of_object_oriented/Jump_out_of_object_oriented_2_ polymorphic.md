@@ -91,7 +91,19 @@ BaseApiManager需要它的子类去覆盖methodName等方法来执行具体的AP
 
 ```
 <ManagerInterface> : APIName() 我们先定义一个ManagerInterface接口，这个接口里面含有原本需要被覆重的方法。
-<Interceptor> : willRun(), didRun() 我们再定义一个Interceptor的接口，它用来做拦截器。 BaseManager.child<ManagerInterface> 在BaseController里面添加一个property，叫做child，这就要求这个child必须要满足<ManagerInterface></ManagerInterface>这个接口，但是BaseManager不需要满足<ManagerInterface>这个接口。 BaseManager.init() { ... self.child = self 在init的时候把child设置成自己 # 如果语言支持反射，那么我们可以这么写： if self.child implemented <ManagerInterface> {
+
+<Interceptor> : willRun(), didRun() 我们再定义一个Interceptor的接口，它用来做拦截器。 
+
+BaseManager.child<ManagerInterface> 在BaseManager里面添加一个property，叫做child，这就要求这个child必须要满足<ManagerInterface></ManagerInterface>这个接口，但是BaseManager不需要满足<ManagerInterface>这个接口。 
+
+BaseManager.init() { 
+    
+    ... 
+    
+    self.child = self 在init的时候把child设置成自己 
+    
+    # 如果语言支持反射，那么我们可以这么写： 
+    if self.child implemented <ManagerInterface> {
         self.child = self
     }
     # 如上的写法就能够保证我们的子类能够基于这些接口有对应的实现
@@ -132,6 +144,8 @@ BaseManager.run() {
 
 我们可以通过在接口中设置哪些方法是必须要实现，哪些方法是可选实现的来处理对应的问题。这本身倒不是缺陷，正是多态希望的样子。
 
+* 父类有一些方法即便被覆重，父类原方法还是要执行的
+
 由于我们通过接口规避了多态，那么这些其实是可以通过在接口中定义 `可选方法` 来实现的，由父类方法调用 `child` 的 `可选方法` ，调用时机就可以由父类决定。这两个方法不必重名，因此也不存在多态时，不能分辨调用时机或是否需要调用父类方法的情况。
 
 总结一下，通过IOP，我们做好了两件事：
@@ -151,10 +165,39 @@ BaseManager.run() {
 举个例子：当一个对象的主要业务功能是搜索，那么它在整个程序里面扮演的角色是搜索者的角色。在基于搜索派生出的业务中，会做一些跟搜索无关的事情，比如搜索后进行人工加权重排列表，搜索前进行关键词分词（假设分词方案根据不同的派生类而不同）。那么这时候如果采用多态的方案，就是由子类覆重父类关于重排列表的方法，覆重分词方法。如果在编写子类的程序员忘记这些必要的覆重或者覆重了不应该覆重的方法，就会进入上面提到的四个困境。所以这时候需要提供一套接口，规范子类去做覆重，从而避免之前提到的四种困境：
 
 ```
-Search : { search(), split(), resort()} 采用多态的方案：
-Search -> ClothSearch : { [ Search ], @split(), @resort() } function search() { ... self.split() # 如果子类没有覆重这个方法而父类提供的只是空方法，这里就很容易出问题。如果子类在覆重的时候引入了其他不相关逻辑，那么这个对象就显得不够单纯，角色复杂了。 ... self.resort() ... } 采用IOP的方案：
+Search : { search(), split(), resort()} 
+
+采用多态的方案：
+Search -> ClothSearch : { [ Search ], @split(), @resort() }
+ 
+function search() { 
+    ... 
+    self.split() # 如果子类没有覆重这个方法而父类提供的只是空方法，这里就很容易出问题。如果子类在覆重的时候引入了其他不相关逻辑，那么这个对象就显得不够单纯，角色复杂了。 
+    ... 
+    self.resort() 
+    ... 
+} 
+
+采用IOP的方案：
 <SearchManager> : {split(), resort()}
-Search<SearchManager> : { search(), assistant<SearchManager> } # 也可以是这样：Search : { search(), assistant<SearchManager> }，这么做的话，则要求子类必须实现<SearchManager> function search() { ... self.assistant.split() # self.assistant可以就是self，也可以由初始化时候指定为其他对象，将来进行业务剥离的时候，只要将assistant里面的方法剥离或者讲assistant在初始化时指定为其他对象也好。 ... self.assistant.resort() ... } Search -> ClothSearch<SearchManager> : { [ Search ], split(), resort() } # 由于子类被接口要求必须实现split()和resort()方法，因而规避了前文提到的风险，在剥离业务的时候也能非常方便。 外面使用对象时：ClothSearch.search()
+Search<SearchManager> : { search(), assistant<SearchManager> } # 也可以是这样：Search : { search(), assistant<SearchManager> }，这么做的话，则要求子类必须实现<SearchManager> 
+
+function search() { 
+    
+    ... 
+    
+    self.assistant.split() # self.assistant可以就是self，也可以由初始化时候指定为其他对象，将来进行业务剥离的时候，只要将assistant里面的方法剥离或者讲assistant在初始化时指定为其他对象也好。 
+    
+    ... 
+    
+    self.assistant.resort() 
+    
+    ... 
+} 
+
+Search -> ClothSearch<SearchManager> : { [ Search ], split(), resort() } # 由于子类被接口要求必须实现split()和resort()方法，因而规避了前文提到的风险，在剥离业务的时候也能非常方便。 
+
+外面使用对象时：ClothSearch.search()
 ```
 
 如果示例中不同的子类对于search()方法有不同的实现，那么这个时候就适用多态。

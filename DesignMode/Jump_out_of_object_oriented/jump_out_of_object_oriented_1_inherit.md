@@ -103,13 +103,13 @@ Casa这么想。
 ```
 <search_protocol>:{search()}
 
-   SEARCH_LOGIC<search_protocol>
+SEARCH_LOGIC<search_protocol>
 
-   SEARCH_BAR:{textField, SEARCH_LOGIC<search_protocol>}
+SEARCH_BAR:{textField, SEARCH_LOGIC<search_protocol>}
 
-   HOME_SEARCH_BAR:{SearchBar1, SearchLogic1}
-   PAGE_SEARCH_BAR:{SearchBar2, SearchLogic1}
-   LOCAL_SEARCH_BAR:{SearchBar2, SearchLogic2}
+HOME_SEARCH_BAR:{SearchBar1, SearchLogic1}
+PAGE_SEARCH_BAR:{SearchBar2, SearchLogic1}
+LOCAL_SEARCH_BAR:{SearchBar2, SearchLogic2}
 ```
 
 这样一来，搜索框和搜索逻辑分别形成了两个不同的组件，分别在 `HOME_SEARCH_BAR`, `PAGE_SEARCH_BAR`, `LOCAL_SEARCH_BAR` 中以不同的形态组合而成。 `textField` 和 `SEARCH_LOGIC<search_protocol>` 之间通过delegate的模式进行数据交互。 这样就解决了上面提到的两种类型的问题。 **大部分我们通过代码复用来选择继承的情况，其实都是变成组合比较好。** 因此我在团队中一直在推动使用组合来代替继承的方案。 那么什么时候继承才有用呢？ 
@@ -132,10 +132,10 @@ ApiManager -> CityManager
 
 ```
 Object并不影响Model, View, Controller的执行逻辑和业务  
-    Object为子类提供基础服务，例如内存计数等
+Object为子类提供基础服务，例如内存计数等
 
-    ApiManager并不影响其他的Manager  
-    ApiManager只是给派生的Manager提供服务而已,ApiManager做的只会是份内的是，对于子类做的事情不参与。
+ApiManager并不影响其他的Manager  
+ApiManager只是给派生的Manager提供服务而已,ApiManager做的只会是份内的是，对于子类做的事情不参与。
 ```
 
 > 层级关系明显，功能划分清晰，父类和子类各做各的。  
@@ -143,16 +143,16 @@ Object并不影响Model, View, Controller的执行逻辑和业务
 ```
 Object并不参与MVC的管理中，那些都只是各自派生类自己要处理的事情
 
-    DetailManager, ListManager, CityManager都只是处理各自业务的对象  
-    ApiManager并不应该涉足对应的业务。
+DetailManager, ListManager, CityManager都只是处理各自业务的对象  
+ApiManager并不应该涉足对应的业务。
 ```
 
 > 父类的所有变化，都需要在子类中体现，也就是说此时耦合已经成为需求  
 
 ```
-Object对类的描述，对内存引用的计数方式等，都是普遍影响派生类的。  
-    ApiManager中对于网络请求的发起，网络状态的判断，是所有派生类都需要的。  
-    此时，牵一发动全身就已经成为了需求，是适用继承的
+Object对类的描述，对内存引用的计数方式等，都是普遍影响派生类的。
+ApiManager中对于网络请求的发起，网络状态的判断，是所有派生类都需要的。  
+此时，牵一发动全身就已经成为了需求，是适用继承的
 ```
 
 此时我们回过头来看为什么 `HOME_SEARCH_BAR`,`PAGE_SEARCH_BAR`,`LOCAL_SEARCH_BAR` 采用继承的方案是不恰当的：
