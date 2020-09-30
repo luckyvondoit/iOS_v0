@@ -16,7 +16,8 @@
 
 [firefox-ios](https://github.com/mozilla/firefox-ios) 火狐浏览器开源
 
-[f8app FaceBook](https://github.com/fbsamples/f8app) 开源的 APP，有一整套的教程教你如何构建 APP ，好心人已经翻译了这套教程  [Building-the-F8-2016-App-CN]
+[f8app FaceBook](https://github.com/fbsamples/f8app) 开源的 APP，有一整套的教程教你如何构建 APP ，好心人已经翻译了这套教程  
+[Building-the-F8-2016-App-CN]
 (https://github.com/pockry/Building-the-F8-2016-App-CN)
 
 [Awesome-Swift-Education Swift](https://github.com/hsavit1/Awesome-Swift-Education) 的学习资源帖，都是些技术文章
