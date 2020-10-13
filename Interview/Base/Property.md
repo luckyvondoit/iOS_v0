@@ -151,7 +151,7 @@
 
 **小结**
 
-1. 一旦你重写了getter.setter方法,你必须使用@synthesize variable = _variable来区分属性名与方法名.
+1. 一旦你同时重写了getter、setter方法,你必须使用@synthesize variable = _variable来区分属性名与方法名.
 2. ARC与MRC的getter方法一致,就setter方法有着略微区别.
 
 
@@ -220,7 +220,28 @@ Auto property synthesis will not synthesize property 'str'; it will be implement
 @end
 ```
 
+### getter方法中为何不能用self
+
+有经验的开发者应该都知道这一点，在getter方法中是不能使用self.的，比如：
+
+```
+- (NSString *)name
+{
+    NSLog(@"rewrite getter");
+    return self.name;  // 错误的写法，会造成死循环
+}
+```
+
+原因代码注释中已经写了，这样会造成死循环。这里需要注意的是：self.name实际上就是执行了属性name的getter方法，getter方法中又调用了self.name， 会一直递归调用，直到程序崩溃。通常程序中使用：
+
+```
+self.name = @"aaa";
+```
+
+这样的方式，setter方法会被调用。
+
 ### @property修饰符
+
 关于ARC下，不显示指定属性关键字时，默认关键字： 
 1. 基本数据类型：atomic readwrite assign 
 2. 普通OC对象： atomic readwrite strong
@@ -234,7 +255,7 @@ atomic 修饰的 property，getter 和 setter 都加锁了，而且是同一个�
 
 atomic 之前是用自旋锁 OSSpinLock 实现的，由于存在优先级反转的问题（低优先级线程加锁，又来了个高优先级的线程被cpu优先执行，但是需要等低优先级线程解锁，而低优先级线程无法执行，造成死锁），iOS 10 后改用 os_unfair_lock 实现了。
 
-atomic只能保证读写操作的原子性，不会出现写了一半就开始读取而造成的数据紊乱问题（读写安全）。
+atomic只能保证读写操作的原子性，不会出现写了一半就开始读取而造成的数据紊乱问题（读写安全）,不是线程安全的。
 
 atomic是对整个对象（self）进行加锁，效率低，而且无法保证线程安全，基本不使用。
 
@@ -292,23 +313,185 @@ readwrite告诉编译器生成get和set方法。
 
 设置属性是否可以为空，和swift混编时会用到。
 
-### 面试题
 
-#### 什么情况使用 weak 关键字，相比 assign 有什么不同？
+### weak和assign区别
 
-什么情况使用 weak 关键字？
+经常会有面试题问weak和assign的区别，这里介绍一下。
 
-1. 在 ARC 中,在有可能出现循环引用的时候,往往要通过让其中一端使用 weak 来解决,比如: delegate 代理属性
-2. 自身已经对它进行一次强引用,没有必要再强引用一次,此时也会使用 weak,自定义 IBOutlet 控件属性一般也使用 weak；当然，也可以使用strong。在下文也有论述：[《IBOutlet连出来的视图属性为什么可以被设置成weak?》](https://upload-images.jianshu.io/upload_images/1322408-f9a65f0baa774b86.jpg?imageMogr2/auto-orient/strip|imageView2/2/w/506/format/webp)
+weak和strong是对应的，一个是强引用，一个是弱引用。weak和assign的区别主要是体现在两者修饰OC对象时的差异。上面也介绍过，assign通常用来修饰基本数据类型，如int、float、BOOL等，weak用来修饰OC对象，如UIButton、UIView等。
 
-不同点：
+**基本数据类型用weak来修饰**
 
-1. weak 此特质表明该属性定义了一种“非拥有关系” (nonowning relationship)。为这种属性设置新值时，设置方法既不保留新值，也不释放旧值。此特质同assign类似， 然而在属性所指的对象遭到摧毁时，属性值也会清空(nil out)。 而 assign 的“设置方法”只会执行针对“纯量类型” (scalar type，例如 CGFloat 或 NSlnteger 等)的简单赋值操作。
-2. assign 可以用非 OC 对象,而 weak 必须用于 OC 对象
+假设声明一个int类型的属性，但是用weak来修饰，会发生什么呢？
 
+```
+@property (nonatomic, weak) int age;
+```
 
-### 怎么用 copy 关键字？
-用途：
-1. NSString、NSArray、NSDictionary 等等经常使用copy关键字，是因为他们有对应的可变类型：NSMutableString、NSMutableArray、NSMutableDictionary；
-2. block 也经常使用 copy 关键字，具体原因见官方文档：Objects Use Properties to Keep Track of Blocks：
+Xcode会直接提示错误，错误信息如下：
+
+```
+Property with 'weak' attribute must be of object type
+```
+
+也就是说，weak只能用来修饰对象，不能用来修饰基本数据类型，否则会发生编译错误。
+
+**对象使用assign来修饰**
+
+假设声明一个UIButton类型的属性，但是用assign来修饰，会发生什么呢？
+
+```
+@property (nonatomic, assign) UIButton *assignBtn;
+```
+
+编译，没有问题，运行也没有问题。我们再声明一个UIButton,使用weak来修饰，对比一下：
+
+```
+@interface ViewController ()
+
+@property (nonatomic, assign) UIButton *assignBtn;
+
+@property (nonatomic, weak) UIButton *weakButton;
+
+@end
+```
+
+正常初始化两个button：
+
+```
+UIButton *btn = [[UIButton alloc] initWithFrame:CGRectMake(100,100,100,100)];
+[btn setTitle:@"Test" forState:UIControlStateNormal];
+btn.backgroundColor = [UIColor lightGrayColor];
+self.assignBtn = btn;
+self.weakButton = btn;
+```
+
+此时打印两个button，没有区别。释放button：
+
+```
+btn = nil;
+```
+
+释放之后打印self.weakBtn和self.assignBtn
+
+```
+NSLog(@"self.weakBtn = %@",self.weakButton);
+NSLog(@"self.assignBtn = %@",self.assignBtn);
+```
+
+运行，执行到self.assignBtn的时候崩溃了，崩溃信息是
+
+```
+EXC_BAD_ACCESS (code=EXC_I386_GPFLT)
+ ```
+
+weak和assign修饰对象时的差别体现出来了。
+
+weak修饰的对象，当对象释放之后，即引用计数为0时，对象会置为nil
+
+```
+2018-12-06 16:17:05.774298+0800 TestClock[15863:192570] self.weakBtn = (null)
+```
+
+而向nil发送消息是没有问题的，不会崩溃。
+
+assign修饰的对象，当对象释放之后，即引用计数为0时，对象会变为野指针，不知道指向哪，再向该对象发消息，非常容易崩溃。
+
+因此，当属性类型是对象时，不要使用assign，会带来一些风险。
+
+**堆和栈**
+
+上面说到，属性用assign修饰，当被释放后，容易变为野指针，容易带来崩溃问题，那么，为何基本数据类型可以用assign来修饰呢？这就涉及到堆和栈的问题。
+
+相对来说，堆的空间大，通常是不连续的结构，使用链表结构。使用堆中的空间，需要开发者自己去释放。OC中的对象，如 UIButton 、UILabel ，[[UIButton alloc] init] 出来的，都是分配在堆空间上。
+
+栈的空间小，约1M左右，是一段连续的结构。栈中的空间，开发者不需要管，系统会帮忙处理。iOS开发 中 int、float等变量分配内存时是在栈上。如果栈空间使用完，会发生栈溢出的错误。
+
+由于堆、栈结构的差异，栈和堆分配空间时的寻址方式也是不一样的。因为栈是连续的控件，所以栈在分配空间时，会直接在未使用的空间中分配一段出来，供程序使用；如果剩下的空间不够大，直接栈溢出；堆是不连续的，堆寻找合适空间时，是顺着链表结点来寻找，找到第一块足够大的空间时，分配空间，返回。根据两者的数据结构，可以推断，堆空间上是存在碎片的。
+
+回到问题，为何assign修饰基本数据类型没有野指针的问题？因为这些基本数据类型是分配在栈上，栈上空间的分配和回收都是系统来处理的，因此开发者无需关注，也就不会产生野指针的问题。
+
+### copy、strong、mutableCopy
+
+**可变对象和不可变对象**
+
+Objective-C中存在可变对象和不可变对象的概念。像NSArray、NSDictionary、NSString这些都是不可变对象，像NSMutableArray、NSMutableDictionary、NSMutableString这些是可变对象。可变对象和不可变对象的区别是，不可变对象的值一旦确定就不能再修改。
+
+OC的动态性直到运行时才去做类型检查，如果我们将NSMutableString赋值给一个NSString变量，在程序执行过程中在类外修改了NSMutableString，类内的NSString变量也会跟着变化。可能会在不知情的情况下修改了属性的值，造成意想不到的bug。
+
+**深拷贝和浅拷贝**
+
+编译器做了优化，对于不可变的对象调用copy，只会进行指针copy。对可变的对象调用copy，会进行值copy
+
+**copy和mutableCopy**
+
+对可变和不可不对象进行copy，生成的都是不可变对象。
+对可变和不可不对象进行mutableCopy，生成的都是可变对象。
+
+可以看出，对不可变对象的copy操作是浅拷贝，其余的都为深拷贝。
+
+**自定义对象如何支持copy方法**
+
+项目开发中经常会有自定义对象的需求，那么自定义对象是否可以copy呢？如何支持copy？
+
+自定义对象可以支持copy方法，我们所需要做的是：自定义对象遵守NSCopying协议，且实现copyWithZone方法。NSCopying协议是系统提供的，直接使用即可。
+
+遵守NSCopying协议：
+
+```
+@interface Student : NSObject <NSCopying>
+{
+    NSString *_sex;
+}
+
+@property (atomic, copy) NSString *name;
+
+@property (nonatomic, copy) NSString *sex;
+
+@property (nonatomic, assign) int age;
+
+@end
+```
+
+实现CopyWithZone方法：
+
+```
+- (instancetype)initWithName:(NSString *)name age:(int)age sex:(NSString *)sex
+{
+    if(self = [super init]){
+        self.name = name;
+        _sex = sex;
+        self.age = age;
+    }
+    return self;
+}
+
+- (instancetype)copyWithZone:(NSZone *)zone
+{
+    // 注意，copy的是自己，因此使用自己的属性
+    Student *stu = [[Student allocWithZone:zone] initWithName:self.name age:self.age sex:_sex];
+    return stu;
+}
+```
+
+测试代码：
+
+```
+- (void)testStudent
+{
+    Student *stu1 = [[Student alloc] initWithName:@"Wang" age:18 sex:@"male"];
+    Student *stu2 = [stu1 copy];
+    NSLog(@"stu1 = %p stu2 = %p",stu1,stu2);
+}
+```
+
+输出结果：
+
+```
+stu1 = 0x600003a41e60 stu2 = 0x600003a41fc0
+```
+
+这里是一个深拷贝，根据copyWithZone方法的实现，应该很容易明白为何是深拷贝。
+
+除了NSCopying协议和copyWithZone方法，对应的还有NSMutableCopying协议和mutableCopyWithZone方法，实现都是类似的，不做过多介绍。
 

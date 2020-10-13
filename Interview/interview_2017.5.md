@@ -88,26 +88,48 @@ block会导致对象延后释放。block写的逻辑比较集中，但是会导�
 <details>
 <summary> 参考内容 </summary>
 
+属性是OC访问成员变量的一种方式，其实质是ivar + setter + getter。
+基本数据类型默认的关键字是 automatic，readwrite，assign，对象类型的默认是automatic，readwirte，strong。
+@synthesize是告诉编译器自动生成setter和getter方法。@dynamic是不让编译器生成setter和getter方法。
+
+
 </details>
 
-4. 属性的默认关键字是什么？
 5. NSString为什么要用copy关键字，如果用strong会有什么问题？（注意：这里没有说用strong就一定不行。使用copy和strong是看情况而定的）
+
+<details>
+<summary> 参考内容 </summary>
+
+NSString分为可变和不可变类型，如果是可变类型，在类外部修改了会导致类内值发生变化，影响运行结果。使用copy对于可变类型进行了深拷贝，相互独立。
+
+</details>
+
 6. 如何令自己所写的对象具有拷贝功能?
-7. 可变集合类 和 不可变集合类的 copy 和 mutablecopy有什么区别？如果是集合是内容复制的话，集合里面的元素也是内容复制么？
-8.  为什么IBOutlet修饰的UIView也适用weak关键字？
-9.  nonatomic和atomic的区别？atomic是绝对的线程安全么？为什么？如果不是，那应该如何实现？
-10. UICollectionView自定义layout如何实现？
-11. 用StoryBoard开发界面有什么弊端？如何避免？
-12. 进程和线程的区别？同步异步的区别？并行和并发的区别？
-13. 线程间通信？
-14. GCD的一些常用的函数？（group，barrier，信号量，线程同步）
-15. 如何使用队列来避免资源抢夺？
-16. 数据持久化的几个方案（fmdb用没用过）
-17. 说一下AppDelegate的几个方法？从后台到前台调用了哪些方法？第一次启动调用了哪些方法？从前台到后台调用了哪些方法？
-18. NSCache优于NSDictionary的几点？
-19. 知不知道Designated Initializer？使用它的时候有什么需要注意的问题？
-20. 实现description方法能取到什么效果？
-21. objc使用什么机制管理对象内存？
+
+<details>
+<summary> 参考内容 </summary>
+
+遵循NSCopying协议，实现相应的方法。
+
+</details>
+
+
+
+1. 可变集合类 和 不可变集合类的 copy 和 mutablecopy有什么区别？如果是集合是内容复制的话，集合里面的元素也是内容复制么？
+2.  为什么IBOutlet修饰的UIView也适用weak关键字？
+3.  nonatomic和atomic的区别？atomic是绝对的线程安全么？为什么？如果不是，那应该如何实现？
+4.  UICollectionView自定义layout如何实现？
+5.  用StoryBoard开发界面有什么弊端？如何避免？
+6.  进程和线程的区别？同步异步的区别？并行和并发的区别？
+7.  线程间通信？
+8.  GCD的一些常用的函数？（group，barrier，信号量，线程同步）
+9.  如何使用队列来避免资源抢夺？
+10. 数据持久化的几个方案（fmdb用没用过）
+11. 说一下AppDelegate的几个方法？从后台到前台调用了哪些方法？第一次启动调用了哪些方法？从前台到后台调用了哪些方法？
+12. NSCache优于NSDictionary的几点？
+13. 知不知道Designated Initializer？使用它的时候有什么需要注意的问题？
+14. 实现description方法能取到什么效果？
+15. objc使用什么机制管理对象内存？
 
 ### 中级
 
