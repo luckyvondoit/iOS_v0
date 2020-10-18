@@ -255,7 +255,7 @@ NSLog(@"p1.nickname is %@", p1.nickname);
 
 ### 2、类的对象的copy
 
-此处唯一需要说明的一点就是注意类的继承。
+此处唯一需要说明的一点就是注意类的继承，需复制父类的信息。
 
 1. 类直接继承自NSObject，无需调用[super copyWithZone:zone]
 2. 父类实现了copy协议，子类也实现了copy协议，子类需要调用[super copyWithZone:zone]
@@ -278,6 +278,8 @@ NSCopying协议中的方法只有一个，如下：
  return model;
 }
 ```
+
+官方文档中说[NSObject](https://developer.apple.com/documentation/objectivec/nsobject?language=objc) zone is nil，通过验证，自定义对象调用copy方法后，会调用`- (id)copyWithZone:(nullable NSZone *)zone`传的zone为`NULL`所以使用allocWithZone和alloc等价。
 
 ### 4、NSMutableCopying
 
