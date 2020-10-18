@@ -281,6 +281,8 @@ NSCopying协议中的方法只有一个，如下：
 
 官方文档中说[NSObject](https://developer.apple.com/documentation/objectivec/nsobject?language=objc) zone is nil，通过验证，自定义对象调用copy方法后，会调用`- (id)copyWithZone:(nullable NSZone *)zone`传的zone为`NULL`所以使用allocWithZone和alloc等价。
 
+如果自定义类中用到了集合，注意要进行完全深拷贝。
+
 ### 4、NSMutableCopying
 
 当自定义的类有一个属性是可变对象时，对此属性复制时要执行mutableCopyWithZone操作。
