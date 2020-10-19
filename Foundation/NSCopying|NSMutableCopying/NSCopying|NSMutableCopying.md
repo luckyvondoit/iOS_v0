@@ -20,8 +20,6 @@ block的copy操作是为了将NSStackBlock由栈空间复制到堆空间变成NS
 
 如果类想要支持copy操作，则必须实现NSCopying协议，也就是说实现copyWithZone方法。
 
-如果类想要支持copy操作，则必须实现NSCopying协议，也就是说实现copyWithZone方法。
-
 iOS系统中的一些类已经实现了NSCopying或者NSMutableCopying协议的方法，如果向未实现相应方法的系统类或者自定义类发送copy或者mutableCopy消息，则会crash。
 
 ```
