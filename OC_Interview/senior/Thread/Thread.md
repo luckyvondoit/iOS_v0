@@ -1,4 +1,11 @@
-1. NSThread、GCD、NSOperation多线程
+## 目录
+1. [NSThread、GCD、NSOperation多线程](#1)
+2. [如何保证多线程中读写分离，加锁方案？](#2)
+3. [解决网络请求和界面刷新顺序问题](#3)
+
+---
+
+1. <span id="1">NSThread、GCD、NSOperation多线程</span>
 <details>
 <summary> 参考 </summary>
 
@@ -30,11 +37,19 @@
 ③:如果异步操作的过程需要更多的被交互和UI呈现出来，NSOperationQueue会是一个更好的选择。底层代码中，任务之间不太互相依赖，而需要更高的并发能力，GCD则更有优势
 </details>
 
-2. 如何保证多线程中读写分离，加锁方案？
+2. <span id="2">如何保证多线程中读写分离，加锁方案？</span>
 
 <details>
 <summary> 参考 </summary>
 
 [多线程](https://github.com/luckyvondoit/iOS/blob/master/Book/UnderlyingPrincipleOfOC/Multithreading.md)
 
+</details>
+
+
+3. <span id="3">解决网络请求和界面刷新顺序问题</span>
+
+<details>
+<summary> 参考 </summary>
+* [解决网络请求和界面刷新顺序问题](https://blog.csdn.net/u012709932/article/details/77924019)
 </details>

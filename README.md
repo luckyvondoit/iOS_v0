@@ -26,7 +26,6 @@
 
 ## interview
 
-* ~~[Interview](./Interview)~~
 * [OC_Interview](./OC_Interview)
 
 
