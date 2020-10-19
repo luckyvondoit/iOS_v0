@@ -1,7 +1,5 @@
 # NSCopying、NSMutableCopying
 
-[跳转](#copy)
-
 ## 为什么要使用copy？
 
 OC中有指针的概念，当多个指针指向同一个对象时，只要任意一个指针修改了指向的对象，其他指针访问的都是修改后的对象。
@@ -60,7 +58,6 @@ NSMutableString *test2 = [test1 copy];
 
 浅复制是指针拷贝；深复制是内容拷贝，会拷贝对象本身
 
-<span id="copy"></span>
 ## Copy 与 MutableCopy 
 在iOS中，有一些系统类根据是否可变进行了区分，例如 NSString 与 NSMutableString，NSArray 与 NSMutableArray 等。copy和mutablecopy就是为了根据需要复制出可变和不可变的对象。可以分为如下四种情况：
 
