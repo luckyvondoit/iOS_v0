@@ -65,7 +65,7 @@ NSMutableString *test2 = [test1 copy];
 * 不可变对象调用copy，为进行内容复制，为浅拷贝
 * 不可变对象调用mutableCopy，生成新对象，为深拷贝
 * 可变对象调用copy，生成新对象，为深拷贝
-* 可变对象调用mutableCop，生成新对象，为深拷贝
+* 可变对象调用mutableCopy，生成新对象，为深拷贝
 
 ## 系统非容器类的copy
 
