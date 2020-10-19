@@ -212,45 +212,7 @@ NSLog(@"arr2 = %@",arr2);
 
 `NSMutableArray *arr2 = [[NSMutableArray alloc] initWithArray:arr1 copyItems:YES];`能实现完全深拷贝。
 
-如何是集合多层嵌套集合，可以使用归档。可以先通过 NSKeyedArchiver 将对象归档，再通过 NSKeyedUnarchiver 将对象解归档。由于在归档时，对象中每个成员变量都会收到 encodeWithCoder: 消息，相当于将对象所有的数据均序列化保存到磁盘上（可以看成换了种数据格式的拷贝），再通过 initWithCoder: 解归档时，就将拷贝过的数据经过转换后读取出来，深拷贝。
-
-**思考**：
-
-因为不可变的集合，不可修改，copy出一份没有意义，直接返回了之前的对象，以下用NSMutableArray讨论
-
-```
-NSObject *p = [NSObject new];
-NSMutableArray *arr1 = [NSMutableArray arrayWithObject:p];
-
-NSMutableArray *arr2 = [arr1 mutableCopy];
-NSMutableArray *arr3 = [[NSMutableArray alloc] initWithArray:arr1 copyItems:YES];
-
-NSLog(@"%p",p);
-NSLog(@"%p, %p, %p",arr1.firstObject,arr2.firstObject,arr3.firstObject);
-```
-
-对集合进行copy，会对集合和集合的每一个元素调用copy。因为NSObject未遵循NSCopying协议，会报`unrecognized selector`错误。
-
-```
-2020-10-19 12:23:50.905888+0800 Copy[47882:2659559] -[NSObject copyWithZone:]: unrecognized selector sent to instance 0x100562690
-2020-10-19 12:23:50.907383+0800 Copy[47882:2659559] *** Terminating app due to uncaught exception 'NSInvalidArgumentException', reason: '-[NSObject copyWithZone:]: unrecognized selector sent to instance 0x100562690'
-*** First throw call stack:
-(
-	0   CoreFoundation                      0x00007fff4dfc1bc9 __exceptionPreprocess + 256
-	1   libobjc.A.dylib                     0x00007fff787683c6 objc_exception_throw + 48
-	2   CoreFoundation                      0x00007fff4e03c2cb -[NSObject(NSObject) __retain_OA] + 0
-	3   CoreFoundation                      0x00007fff4df636a8 ___forwarding___ + 1478
-	4   CoreFoundation                      0x00007fff4df63058 _CF_forwarding_prep_0 + 120
-	5   CoreFoundation                      0x00007fff4df186c8 -[NSArray initWithArray:range:copyItems:] + 297
-	6   CoreFoundation                      0x00007fff4df3ec97 -[__NSPlaceholderArray initWithArray:copyItems:] + 75
-	7   Copy                                0x0000000100001bfa main + 170
-	8   libdyld.dylib                       0x00007fff79f2e3d5 start + 1
-	9   ???                                 0x0000000000000001 0x0 + 1
-)
-libc++abi.dylib: terminating with uncaught exception of type NSException
-```
-
-改成遵循了NSCopying协议的对象
+顺便提一下，对集合调用copy，只会复制集合中的指针，不会对每一个元素进行copy而`initWithArry: copyItems:`会对集合的每一个元素调用copy。
 
 ```
 @interface Person : NSObject<NSCopying>
@@ -258,38 +220,36 @@ libc++abi.dylib: terminating with uncaught exception of type NSException
 @end
 
 @implementation Person
-//zone 为NULL 用alloc效果等价
+
 - (id)copyWithZone:(nullable NSZone *)zone {
     Person *person = [[[self class] allocWithZone:zone] init];
+    NSLog(@"%s",__func__);
     return person;
 }
 
 @end
-
-- (void)test {
-  Person *p = [Person new];
-  NSMutableArray *arr1 = [NSMutableArray arrayWithObject:p];
-  
-  NSMutableArray *arr2 = [arr1 mutableCopy];
-  NSMutableArray *arr3 = [[NSMutableArray alloc] initWithArray:arr1 copyItems:YES];
-  
-  NSLog(@"%p",p);
-  NSLog(@"%p, %p, %p",arr1.firstObject,arr2.firstObject,arr3.firstObject);
-}
-
 ```
 
-调用test，查看打印结果：
+```
+Person *p = [Person new];
+NSMutableArray *arr1 = [NSMutableArray arrayWithObject:p];
+
+什么都不打印打印
+```
 
 ```
-2020-10-19 12:29:04.016460+0800 Copy[48372:2665498] 0x10302bef0
-2020-10-19 12:29:04.017227+0800 Copy[48372:2665498] 0x10302bef0, 0x10302bef0, 0x10301fb70
+Person *p = [Person new];
+NSMutableArray *arr1 = [NSMutableArray arrayWithObject:p];
+NSMutableArray *arr3 = [[NSMutableArray alloc] initWithArray:arr1 copyItems:YES];
+
+打印：
+
+2020-10-19 12:54:28.467318+0800 Copy[50857:2695755] -[Person copyWithZone:]
+
+调用了copyWithZone
 ```
-arr1.firstObject和arr2.firstObject的地址一样，通过上面的崩溃我们知道，对array进行copy，会对每一个元素调用copy，既然调用了copy，为什么不把copy之后的新对象地址放在array中？如果把copy对象的地址放入array中就和arr3等价了。未想明白，欢迎补充。
 
-![](./img/5.png)
-
-![](./img/6.png)
+如何是集合多层嵌套集合，可以使用归档。可以先通过 NSKeyedArchiver 将对象归档，再通过 NSKeyedUnarchiver 将对象解归档。由于在归档时，对象中每个成员变量都会收到 encodeWithCoder: 消息，相当于将对象所有的数据均序列化保存到磁盘上（可以看成换了种数据格式的拷贝），再通过 initWithCoder: 解归档时，就将拷贝过的数据经过转换后读取出来，深拷贝。
 
 
 ## 自定义的类的copy
