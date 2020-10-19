@@ -26,8 +26,8 @@
 
 ## interview
 
-* [Concept](./Concept)
-* [Interview](./Interview)
+* ~~[Interview](./Interview)~~
+* [OC_Interview](./OC_Interview)
 
 
 
