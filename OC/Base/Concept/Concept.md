@@ -20,3 +20,12 @@
 6. APNS根据deviceToken发送给对应的用户。
 
 </details>
+
+3. 响应者链
+
+<details>
+<summary> 参考 </summary>
+
+[响应者链]()
+
+</details>
