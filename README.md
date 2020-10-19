@@ -1,33 +1,33 @@
 ## resource
 
-* [大牛Blog](./Blog/README.md)
-* [iOS Book](./Book/README.md)
-* [github开源框架](./Repo/README.md)
+* [大牛Blog](./Blog)
+* [iOS Book](./Book)
+* [github开源框架](./Repo)
 
 ## development tool
 
-* [Clang](./Clang/README.md)
-* [Cocoapods](./Cocoapods/README.md)
-* [LLDB](./LLDB/README.md)
-* [Xcode](./Xcode/README.md)
+* [Clang](./Clang)
+* [Cocoapods](./Cocoapods)
+* [LLDB](./LLDB)
+* [Xcode](./Xcode)
 
 ## design
 
-* [DesignMode](./DesignMode/README.md)
+* [DesignMode](./DesignMode)
 * [OC类继承关系](./Resource/Class.jpg)
 * [UIKit继承关系](./Resource/UIKit_Class.jpg)
-* [PerformanceOptimization](./PerformanceOptimization/README.md)
+* [PerformanceOptimization](./PerformanceOptimization)
 
 ## framework
 
-* [Foundation](./Foundation/README.md)
-* [UIKit](./UIKit/README.md)
-* [include](./include/README.md)
+* [Foundation](./Foundation)
+* [UIKit](./UIKit)
+* [include](./include)
 
 ## interview
 
-* [Concept](./Concept/README.md)
-* [Interview](./Interview/README.md)
+* [Concept](./Concept)
+* [Interview](./Interview)
 
 
 
