@@ -20,6 +20,8 @@
 8. [什么是内存泄露?](#8)
 9. [NSMutableDictionary 中使用setValueForKey 和 setObjectForKey有什么区别?](#9)
 10. [NSCache 和NSDictionary 区别](#10)
+11. [Notification 和KVO区别](#11)
+12. [说一下静态库和动态库之间的区别](#12)
 
 ---
 
@@ -138,5 +140,35 @@
 - NSCache可以设置缓存上限，限制对象个数和总缓存开销。定义了删除缓存对象的时机。这个机制只对NSCache起到指导作用，不会一定执行。
 - NSPurgeableData搭配NSCache使用，可以自动清除数据。
 - 只有那种“重新计算很费劲”的数据才值得放入缓存。
+
+</details>
+
+11. <span id="11">Notification 和KVO区别</span>
+
+<details>
+<summary> 参考 </summary>
+
+- KVO提供一种机制,当指定的被观察的对像的属性被修改后,KVO会自动通知响应的观察者,KVC(键值编码)是KVO的基础
+- 通知:是一种广播机制,在实践发生的时候,通过通知中心对象,一个对象能够为所有关心这个时间发生的对象发送消息,两者都是观察者模式,不同在于KVO是被观察者直接发送消息给观察者,是对象间的直接交互,通知则是两者都和通知中心对象交互,对象之间不知道彼此
+- 本质区别,底层原理不一样.kvo 基于 runtime, 通知则是有个通知中心来进行通知
+
+</details>
+
+12. <span id="12">说一下静态库和动态库之间的区别</span>
+
+<details>
+<summary> 参考 </summary>
+
+**静态库**：
+- 以.a 和 .framework为文件后缀名。
+- 链接时会被完整的复制到可执行文件中，被多次使用就有多份拷贝。
+
+**动态库**：
+- 以.tbd(之前叫.dylib) 和 .framework 为文件后缀名。
+- 链接时不复制，程序运行时由系统动态加载到内存，系统只加载一次，多个程序共用（如系统的UIKit.framework等），节省内存。
+
+静态库.a 和 framework区别:
+- .a 主要是二进制文件,不包含资源,需要自己添加头文件
+- .framework 可以包含头文件+资源信息
 
 </details>
