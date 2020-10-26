@@ -22,6 +22,9 @@
 10. [NSCache 和NSDictionary 区别](#10)
 11. [Notification 和KVO区别](#11)
 12. [说一下静态库和动态库之间的区别](#12)
+13. [如何访问并修改一个类的私有属性？](#13)
+14. [如何把一个包含自定义对象的数组序列化到磁盘？](#14)
+15. [iOS 的沙盒目录结构是怎样的？ App Bundle 里面都有什么？](#15)
 
 ---
 
@@ -170,5 +173,118 @@
 静态库.a 和 framework区别:
 - .a 主要是二进制文件,不包含资源,需要自己添加头文件
 - .framework 可以包含头文件+资源信息
+
+</details>
+
+13. <span id="13">如何访问并修改一个类的私有属性？</span>
+
+<details>
+<summary> 参考 </summary>
+
+- 有两种方法可以访问私有属性,一种是通过KVC获取,一种是通过runtime访问并修改私有属性
+- 创建一个Father类,声明一个私有属性name,并重写description打印name的值,在另外一个类中通过runtime来获取并修改Father中的属性
+
+```objc
+@interface Father ()
+@property (nonatomic, copy) NSString *name;
+@end
+@implementation Father
+
+- (NSString *)description
+{
+    return [NSString stringWithFormat:@"name:%@",_name];
+}
+
+@implementation ViewController
+
+- (void)viewDidLoad {
+
+    [super viewDidLoad];
+
+    Father *father = [Father new];  
+    // count记录变量的数量IVar是runtime声明的一个宏
+    unsigned int count = 0;
+    // 获取类的所有属性变量
+    Ivar *menbers = class_copyIvarList([Father class], &count);
+    
+    for (int i = 0; i < count; i++) {
+        Ivar ivar = menbers[i];
+        // 将IVar变量转化为字符串,这里获得了属性名
+        const char *memberName = ivar_getName(ivar);
+        NSLog(@"%s",memberName);
+        
+        Ivar m_name = menbers[0];
+        // 修改属性值
+        object_setIvar(father, m_name, @"zhangsan");
+        // 打印后发现Father中name的值变为zhangsan
+        NSLog(@"%@",[father description]);
+    }
+
+}
+```
+
+
+</details>
+
+
+14. <span id="">如何把一个包含自定义对象的数组序列化到磁盘？</span>
+
+<details>
+<summary> 参考 </summary>
+
+自定义对象只需要实现NSCoding协议即可
+
+```objc
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    
+    User *user = [User new];
+    Account *account = [Account new];
+    NSArray *userArray = @[user, account];
+    // 存到磁盘
+    NSData * tempArchive = [NSKeyedArchiver archivedDataWithRootObject: userArray];
+}
+// 自定义对象中的代理方法
+- (instancetype)initWithCoder:(NSCoder *)coder
+{
+    self = [super initWithCoder:coder];
+    if (self) {
+        self.user = [aDecoder decodeObjectForKey:@"user"];
+        self.account = [aDecoder decodeObjectForKey:@"account"];
+    }
+    return self;
+}
+// 代理方法
+-(void)encodeWithCoder:(NSCoder *)aCoder{
+    [aCoder encodeObject:self.user forKey:@"user"];
+    [aCoder encodeObject:self.account forKey:@"account"];
+}
+```
+
+</details>
+
+
+
+15. <span id="">iOS 的沙盒目录结构是怎样的？ App Bundle 里面都有什么？</span>
+
+<details>
+<summary> 参考 </summary>
+
+**1.沙盒结构**
+  - Application：存放程序源文件，上架前经过数字签名，上架后不可修改
+  - Documents：常用目录，iCloud备份目录，存放数据,这里不能存缓存文件,否则上架不被通过
+  - Library
+    - Caches：存放体积大又不需要备份的数据,SDWebImage缓存路径就是这个
+    - Preference：设置目录，iCloud会备份设置信息
+  - tmp：存放临时文件，不会被备份，而且这个文件下的数据有可能随时被清除的可能
+
+**2. App Bundle 里面有什么**
+
+- Info.plist:此文件包含了应用程序的配置信息.系统依赖此文件以获取应用程序的相关信息
+- 可执行文件:此文件包含应用程序的入口和通过静态连接到应用程序target的代码
+- 资源文件:图片,声音文件一类的
+- 其他:可以嵌入定制的数据资源
+
 
 </details>
