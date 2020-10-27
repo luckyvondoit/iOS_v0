@@ -449,7 +449,7 @@ void fs_installUncaughtCrashHandler() {
 
 在每一个 HTTP 请求开始时，URL 加载系统创建一个合适的 `NSURLProtocol` 对象处理对应的 URL 请求，而我们需要做的就是写一个继承自 `NSURLProtocol` 的类，并通过 `- registerClass:` 方法注册我们的协议类，然后 URL 加载系统就会在请求发出时使用我们创建的协议对象对该请求进行处理。我们在请求以及响应时记录数据从而实现了对网络流量的监控。
 
-**注意：需要注意的是 `NSURLProtocol` 只能拦截 `UIURLConnection`、`NSURLSession` 和 `UIWebView` 中的请求，对于 `WKWebView`中发出的网络请求无能为力.**
+**注意：需要注意的是 `NSURLProtocol` 只能拦截 `NSURLConnection`、`NSURLSession` 和 `UIWebView` 中的请求，对于 `WKWebView`中发出的网络请求无能为力.**
 
 **实现功能：**
 
