@@ -442,6 +442,9 @@ void fs_installUncaughtCrashHandler() {
 
 **实现功能：**
 
+- 移动网络 IP
+- WIfi 网络 IP
+
 ### 11.3 流量监控
 
 在每一个 HTTP 请求开始时，URL 加载系统创建一个合适的 `NSURLProtocol` 对象处理对应的 URL 请求，而我们需要做的就是写一个继承自 `NSURLProtocol` 的类，并通过 `- registerClass:` 方法注册我们的协议类，然后 URL 加载系统就会在请求发出时使用我们创建的协议对象对该请求进行处理。我们在请求以及响应时记录数据从而实现了对网络流量的监控。
