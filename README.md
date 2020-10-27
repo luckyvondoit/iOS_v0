@@ -27,7 +27,6 @@
 ## interview
 
 * [OC_Interview](./OC_Interview)
-* [iOSInterviewQuestions](./iOSInterviewQuestions)
 
 
 
