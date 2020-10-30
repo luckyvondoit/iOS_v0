@@ -25,6 +25,9 @@
 13. [如何访问并修改一个类的私有属性？](#13)
 14. [如何把一个包含自定义对象的数组序列化到磁盘？](#14)
 15. [iOS 的沙盒目录结构是怎样的？ App Bundle 里面都有什么？](#15)
+16. [什么是 Protocol，Delegate 一般是怎么用的？](#16)
+17. [为什么 NotificationCenter 要 removeObserver? 如何实现自动 remove?](#17)
+18. [有哪些常见的 Crash 场景？](#18)
 
 ---
 
@@ -286,5 +289,57 @@
 - 资源文件:图片,声音文件一类的
 - 其他:可以嵌入定制的数据资源
 
+
+</details>
+
+16. <span id="16">什么是 Protocol，Delegate 一般是怎么用的？</span>
+
+<details>
+<summary> 参考 </summary>
+
+- Protocol表示遵循了某个协议
+
+</details>
+
+17. <span id="17">为什么 NotificationCenter 要 removeObserver? 如何实现自动 remove?</span>
+
+<details>
+<summary> 参考 </summary>
+
+1. 如果不移除的话,万一注册通知的类被销毁以后又发了通知,程序会崩溃.因为向野指针发送了消息
+2. 在iOS 9(更新的系统版本有待考证)之后，苹果对其做了优化，会在响应者调用dealloc方法的时候执行removeObserver:方法。也可以通过如下方式实现：
+
+```swift
+/// Wraps the observer token received from 
+/// NotificationCenter.addObserver(forName:object:queue:using:)
+/// and unregisters it in deinit.
+final class NotificationToken: NSObject {
+    let notificationCenter: NotificationCenter
+    let token: Any
+
+    init(notificationCenter: NotificationCenter = .default, token: Any) {
+        self.notificationCenter = notificationCenter
+        self.token = token
+    }
+
+    deinit {
+        notificationCenter.removeObserver(token)
+    }
+}
+```
+
+现在我们将 observer 封装在了 NotificationToken 中，在 NotificationToken 创建的时候添加 observer， 销毁前自动移除该 observer，这样我们就可以通过管理 NotificationToken 对象的生命周期来实现移除 observer 操作。使用的时候只需要把 NotificationToken 存在一个私有属性中，当持有 NotificationToken 的对象销毁的时候 NotificationToken 会自动移除内部的观察者（当然我们可以主动向该私有属性赋 nil 来移除 observer）。
+
+</details>
+
+18. <span id="18">有哪些常见的 Crash 场景？</span>
+
+<details>
+<summary> 参考 </summary>
+
+- 访问了僵尸对象
+- 访问了不存在的方法
+- 数组越界
+- 在定时器下一次回调前将定时器释放,会Crash
 
 </details>

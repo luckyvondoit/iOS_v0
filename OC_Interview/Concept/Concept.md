@@ -1,11 +1,18 @@
 ## 目录
 
+<!-- <span id=""></span> -->
+
+<!-- <details>
+<summary> 参考 </summary>
+</details> -->
+
 1. [NSNotificationCenter通知中心的实现原理？](#1)
 2. [苹果推送如何实现的？](#2)
 3. [响应者链](#3)
 4. [什么是“应用瘦身”](#4)
 5. [Cocoa Touch的四层架构及其服](#5)
 6. [为什么说Objective-C是一门动态的语言？](#6)
+7. [autorelease 对象在什么情况下会被释放？](#7)
 
 ---
 
@@ -111,4 +118,18 @@ Objective-C 是 C的超集，在C语言的基础上添加了面向对象特性�
 
 让程序在运行时添加代码模块和资源，程序员可以根据需要执行一些可执行代码和资源，而不是在启动时就加载所有组件。举个非常通俗易懂的例子，开发的时候，需要为某种 icon 提供多个不同大小的图片，@2x，@3x，以保证设备更换的时候，图片也会自动地更换，这也体现了其动态加载的特性。也可以动态生成类比如kvo的实现原理。
 
+</details>
+
+7. <span id="7">autorelease 对象在什么情况下会被释放？</span>
+
+分两种情况：手动干预释放和系统自动释放
+
+- 手动干预释放就是指定autoreleasepool,当前作用域大括号结束就立即释放
+-系统自动去释放:不手动指定autoreleasepool,Autorelease对象会在当前的 runloop 迭代结束时释放
+  - kCFRunLoopEntry(1):第一次进入会自动创建一个autorelease
+  - kCFRunLoopBeforeWaiting(32):进入休眠状态前会自动销毁一个autorelease,然后重新创建一个新的autorelease
+  - kCFRunLoopExit(128):退出runloop时会自动销毁最后一个创建的autorelease
+
+<details>
+<summary> 参考 </summary>
 </details>

@@ -93,6 +93,38 @@ dispatch_semaphore_wait(dispatch_semaphore_t dsema, dispatch_time_t timeout);
 1. 当减一后的值小于0时，这个方法会一直等待，即阻塞当前线程，直到信号量+1或者直到超时。
 2. 当减一后的值大于或等于0时，这个方法会直接返回，不会阻塞当前线程。
 
+**注意**：以下为错误使用dispatch_semaphore_wait导致的坑
+
+```objc
+- (void)viewDidLoad 
+{
+    [super viewDidLoad];
+    [self uploadImages:^{
+        NSLog(@"执行完毕");
+    }];
+}
+
+- (void)uploadImages:(dispatch_block_t)completeBlock {
+    dispatch_semaphore_t semp= dispatch_semaphore_create(1);
+    dispatch_async(dispatch_get_global_queue(0,0), ^{
+        [self updateImage:^{
+            dispatch_semaphore_signal(semp);
+        }];
+    });
+    dispatch_semaphore_wait(semp,DISPATCH_TIME_FOREVER);
+}
+
+- (void)updateImage:(dispatch_block_t)completeBlock {
+    dispatch_async(dispatch_get_main_queue(),^{
+        if (completeBlock) {
+            completeBlock();
+        }
+    });
+}
+```
+
+以上代码dispatch_semaphore_wait会卡主线程，所以在不知道会不会在主线程中执行的时候，一定不能用dispatch_semaphore_wait，只有明确需要看主线程（确定？）或者确定在子线程中执行时，才能使用dispatch_semaphore_wait。
+
 ### dispatch_semaphore_signal
 
 ```
