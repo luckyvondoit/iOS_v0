@@ -1,5 +1,5 @@
 | 快捷键 |	说明 |
-| :-: | :-: |
+| --- | --- |
 | command + shift + y |	打开控制台 |
 | command + shift + j |	定位当前文件在导航 |
 | command + shift + o |	输入后快速跳转到对应文件，还可输入方法名 |
