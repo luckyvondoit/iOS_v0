@@ -36,9 +36,11 @@
         self.innerThread = [[MJThread alloc] initWithBlock:^{
             [[NSRunLoop currentRunLoop] addPort:[[NSPort alloc] init] forMode:NSDefaultRunLoopMode];
             
-            while (weakSelf && !weakSelf.isStopped) {
-                [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]];
-            }
+//            while (weakSelf && !weakSelf.isStopped) {
+//                [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]];
+//            }
+            
+            [[NSRunLoop currentRunLoop] run];
         }];
         
         [self.innerThread start];
