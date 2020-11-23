@@ -83,7 +83,7 @@ public class Client{
 
 我们会发现如果这样修改花销是很大的，除了将原来的类分解之外，还需要修改客户端。而直接修改类Animal来达成目的虽然违背了单一职责原则，但花销却小的多，代码如下：
 
-```
+```java
 class Animal{
 	public void breathe(String animal){
 		if("鱼".equals(animal)){
@@ -107,7 +107,7 @@ public class Client{
 
 可以看到，这种修改方式要简单的多。但是却存在着隐患：有一天需要将鱼分为呼吸淡水的鱼和呼吸海水的鱼，则又需要修改Animal类的breathe方法，而对原有代码的修改会对调用“猪”“牛”“羊”等相关功能带来风险，也许某一天你会发现程序运行的结果变为“牛呼吸水”了。这种修改方式直接在代码级别上违背了单一职责原则，虽然修改起来最简单，但隐患却是最大的。还有一种修改方式：
 
-```
+```java
 class Animal{
 	public void breathe(String animal){
 		System.out.println(animal+"呼吸空气");
@@ -190,7 +190,7 @@ public class Client{
 
 由于类A已经实现了第一个功能，所以类B继承类A后，只需要再完成第二个功能就可以了，代码如下：
 
-```
+```java
 class B extends A{
 	public int func1(int a, int b){
 		return a+b;
@@ -298,7 +298,7 @@ interface IReader{
 
 Mother类与接口IReader发生依赖关系，而Book和Newspaper都属于读物的范畴，他们各自都去实现IReader接口，这样就符合依赖倒置原则了，代码修改为：
 
-```
+```java
 class Newspaper implements IReader {
 	public String getContent(){
 		return "林书豪17+9助尼克斯击败老鹰……";
@@ -617,7 +617,7 @@ public class Client{
 
 现在这个设计的主要问题出在CompanyManager中，根据迪米特法则，只与直接的朋友发生通信，而SubEmployee类并不是CompanyManager类的直接朋友（以局部变量出现的耦合不属于直接朋友），从逻辑上讲总公司只与他的分公司耦合就行了，与分公司的员工并没有任何联系，这样设计显然是增加了不必要的耦合。按照迪米特法则，应该避免类中出现这样非直接朋友关系的耦合。修改后的代码如下:
 
-```
+```java
 class SubCompanyManager{
 	public List<SubEmployee> getAllEmployee(){
 		List<SubEmployee> list = new ArrayList<SubEmployee>();
